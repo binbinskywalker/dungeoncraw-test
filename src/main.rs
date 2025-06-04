@@ -103,7 +103,6 @@ fn main() -> BError {
     .with_simple_console(DISPLAY_WIDTH, DISPLAY_HEIGHT, "dungeonfont.jpg")
     .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "dungeonfont.jpg")
     .with_simple_console_no_bg(SCREEN_WIDTH, SCREEN_HEIGHT, "terminal8x8.png")
-    // .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_WIDTH, "terminal8x8.png")
     .build()?;
 
     main_loop(context, State::new())
