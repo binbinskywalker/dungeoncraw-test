@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-pub fn spawne_player(ecs:&mut World, pos:Point){
+pub fn spawn_player(ecs:&mut World, pos:Point){
     ecs.push((Player, pos, 
         Render{
         color:ColorPair::new(WHITE, BLACK),
@@ -26,7 +26,7 @@ pos : Point
             color: ColorPair::new(WHITE, BLACK),
             glyph,
         },
-        MovingRandomly{},
+        ChasingPlayer{},
         Health{current:hp, max:hp},
         Name(name)
         )
