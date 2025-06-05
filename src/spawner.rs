@@ -1,11 +1,13 @@
 use crate::prelude::*;
 
 pub fn spawn_player(ecs:&mut World, pos:Point){
-    ecs.push((Player, pos, 
+    ecs.push((
+        Player, pos, 
         Render{
         color:ColorPair::new(WHITE, BLACK),
         glyph:to_cp437('@')},
-        Health{current:20, max:20}
+        Health{current:10, max:10},
+        FieldOfView::new(8)
     ));
 }
 
@@ -28,7 +30,8 @@ pos : Point
         },
         ChasingPlayer{},
         Health{current:hp, max:hp},
-        Name(name)
+        Name(name),
+        FieldOfView::new(6)
         )
     );
 }
