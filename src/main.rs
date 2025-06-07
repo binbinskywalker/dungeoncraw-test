@@ -47,6 +47,9 @@ impl State {
         spawn_player(&mut ecs, map_builder.player_start);
         spawn_amulet_of_yala(&mut ecs, map_builder.amulet_start);
 
+        map_builder.monster_spawns.iter()
+        .for_each(|pos| spawn_monster(&mut ecs, &mut rng, *pos));
+
         map_builder.rooms.iter().skip(1).map(|r|r.center())
         .for_each(|pos| spawn_monster(&mut ecs, &mut rng, pos));
 

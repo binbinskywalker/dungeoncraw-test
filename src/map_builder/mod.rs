@@ -1,12 +1,16 @@
-use std::thread::spawn;
-
-use crate::prelude::*;
-const NUM_ROOMS: usize=20;
+use crate::{map_builder::prefab::apply_prefab, prelude::*};
 mod empty; 
 mod automata;
+mod drunkard;
+mod rooms;
+mod prefab;
 
+use drunkard::DrunkardsWalkArchitect;
 use empty::EmptyArchitect;
 use automata::CellularAutomataArchitech;
+use rooms::RoomsArchitech;
+
+const NUM_ROOMS: usize=20;
 
 trait MapArchitect {
        fn new(&mut self, rng: &mut RandomNumberGenerator) -> MapBuilder;
@@ -22,9 +26,16 @@ pub struct  MapBuilder {
 
 impl  MapBuilder {
     pub fn new(rng: &mut RandomNumberGenerator) -> Self {
-        // let mut architect=EmptyArchitect{};
-        let mut architect = CellularAutomataArchitech{};
-        architect.new(rng)
+        let mut architect:Box<dyn MapArchitect>=match rng.range(0, 3){
+            0 => Box::new(DrunkardsWalkArchitect{}),
+            1 => Box::new(CellularAutomataArchitech{}),
+            2 => Box::new(RoomsArchitech{}),
+            _ => Box::new(EmptyArchitect{}),
+        };
+
+        let mut mb = architect.new(rng);
+        apply_prefab(&mut mb, rng);
+        mb
     }
 
     fn fill(&mut self, tile : TileType) {
@@ -52,7 +63,7 @@ impl  MapBuilder {
         )
     }
 
-    fn build_random_rooms(&mut self, rng:&mut RandomNumberGenerator){
+        fn build_random_rooms(&mut self, rng:&mut RandomNumberGenerator){
         while self.rooms.len() < NUM_ROOMS {
             let room = Rect::with_size(rng.range(1, SCREEN_WIDTH -10),
              rng.range(1, SCREEN_HEIGHT - 10),

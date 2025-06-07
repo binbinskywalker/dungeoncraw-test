@@ -23,8 +23,10 @@ pub fn tooltips(
 
     draw_batch.target(2);
 
-    positions.iter(ecs).filter(|(_,pos,_)| **pos == map_pos 
-    && player_fov.visible_tiles.contains(&pos))
+    positions.iter(ecs).filter(|(_,pos,_)| **pos == map_pos)
+
+    // positions.iter(ecs).filter(|(_,pos,_)| **pos == map_pos 
+    // && player_fov.visible_tiles.contains(&pos))
     .for_each(|(entity, _, name)|{
         let screen_pos = *mouse_pos *1;
         let display = if let Ok(health) = ecs.entry_ref(*entity)
