@@ -1,6 +1,6 @@
 use std::cell::Cell;
 
-use crate::prelude::*;
+use crate:: prelude::*;
 use super::MapArchitect;
 
 
@@ -73,7 +73,8 @@ impl MapArchitect for CellularAutomataArchitech {
             rooms:Vec::new(),
             monster_spawns :Vec::new(),
             player_start :Point::zero(),
-            amulet_start :Point::zero()
+            amulet_start :Point::zero(),
+            theme: super::themes::DungeonTheme::new()
         };
 
         self.random_noise_map(rng, &mut mb.map);
