@@ -10,6 +10,7 @@ mod tooltips;
 mod combat;
 mod chasing;
 mod fov;
+mod use_item;
 
 pub fn build_input_scheduler() -> Schedule{
     Schedule::builder()
@@ -20,6 +21,7 @@ pub fn build_input_scheduler() -> Schedule{
     .add_system(hud::hud_system())
     .add_system(tooltips::tooltips_system())
     .add_system(fov::fov_system())
+    .add_system(use_item::use_items_system())
     .build()
 }
 pub fn build_player_scheduler() -> Schedule{
