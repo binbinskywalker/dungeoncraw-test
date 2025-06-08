@@ -4,6 +4,7 @@ use ron::de::from_reader;
 use std::collections::btree_map::Range;
 use std::fs::File;
 use std::collections::HashSet;
+use std::process::CommandArgs;
 use legion::systems::CommandBuffer;
 
 #[derive(Clone, Deserialize, Debug)]
@@ -14,7 +15,8 @@ pub struct Template {
     pub name : String,
     pub glyph : char,
     pub provides : Option<Vec<(String, i32)>>,
-    pub hp : Option<i32>
+    pub hp : Option<i32>,
+    pub base_damage: Option<i32>
 }
 
 #[derive(Clone, Deserialize, Debug, PartialEq)]
@@ -87,6 +89,13 @@ impl Templates {
                 }
             }
         });
+        }
+
+        if let Some(damage) = &template.base_damage{
+            commands.add_component(entity, Damage(*damage));
+            if template.entity_type == EntityType::Item{
+                commands.add_component(entity, Weapon{});
+            }
         }
         match template.entity_type {
             EntityType::Item=> commands.add_component(entity, Item{}),
