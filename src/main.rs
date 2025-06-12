@@ -22,12 +22,17 @@ mod prelude {
     pub const  DISPLAY_WIDTH:i32=SCREEN_WIDTH/2;
     pub const  DISPLAY_HEIGHT:i32= SCREEN_HEIGHT/2;
 
+    pub use std::collections::HashMap;
     pub use crate::map::*;
     pub use crate::map_builder::*;
     pub use crate::camera::*;
+    pub use rodio::{OutputStream, Sink};
+    pub use std::fs::File;
+    pub use std::io::BufReader;
 }
 
 use prelude::*;
+use rodio::Source;
 
 struct State {
     ecs:World,
@@ -242,6 +247,14 @@ fn main() -> BError {
     .with_simple_console_no_bg(DISPLAY_WIDTH, DISPLAY_HEIGHT, "dungeonfont.jpg")
     .with_simple_console_no_bg(SCREEN_WIDTH, SCREEN_HEIGHT, "terminal8x8.png")
     .build()?;
+
+    let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+    let file = File::open("resources/bk-1.mp3").unwrap();
+    let source = rodio::Decoder::new(BufReader::new(file)).unwrap();
+    let sink = Sink::try_new(&stream_handle).unwrap();
+    sink.append(source.repeat_infinite());
+    sink.set_volume(0.2);
+    sink.play();
 
     main_loop(context, State::new())
 }
