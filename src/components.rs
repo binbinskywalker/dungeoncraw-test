@@ -10,7 +10,8 @@ pub struct  Render{
 
 #[derive(Clone, Copy, Debug,PartialEq)]
 pub struct  Player{
-    pub map_level:i32
+    pub map_level:i32,
+    pub move_speed :f32
 }
 
 #[derive(Clone, Copy, Debug,PartialEq)]
@@ -50,6 +51,12 @@ pub struct  Item;
 
 #[derive(Clone, Copy, Debug,PartialEq)]
 pub struct  AmuletOfYala;
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct Position {
+    x: f32,
+    y: f32,
+}
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct  FieldOfView{

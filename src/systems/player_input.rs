@@ -23,10 +23,10 @@ pub fn player_input(
 
     if let Some(key) =key{
         let delta = match key{
-            VirtualKeyCode::Left => Point::new(-1, 0),
-            VirtualKeyCode::Right => Point::new(1, 0),
-            VirtualKeyCode::Up =>Point::new(0, -1),
-            VirtualKeyCode::Down => Point::new(0, 1),
+            VirtualKeyCode::Left => PointF::new(-1.0, 0.0),
+            VirtualKeyCode::Right => PointF::new(1.0, 0.0),
+            VirtualKeyCode::Up =>PointF::new(0.0, -1.0),
+            VirtualKeyCode::Down => PointF::new(0.0, 1.0),
             VirtualKeyCode::G => {
                 let (player, player_pos)=players
                 .iter(ecs)
@@ -51,7 +51,7 @@ pub fn player_input(
                     }    
                 }
             );
-            Point::new(0, 0)
+            PointF::new(0.0, 0.0)
             },
             VirtualKeyCode::Key1=> use_item(0, ecs, commands),
             VirtualKeyCode::Key2=> use_item(1, ecs, commands),
@@ -62,15 +62,17 @@ pub fn player_input(
             VirtualKeyCode::Key7=> use_item(6, ecs, commands),
             VirtualKeyCode::Key8=> use_item(7, ecs, commands),
             VirtualKeyCode::Key9=> use_item(8, ecs, commands),
-            _=> Point::new(0, 0),
+            _=> PointF::new(0.0, 0.0),
         };
 
+        let delta_int = Point::new((1.1 *delta.x.round()) as i32, (1.1 * delta.y.round()) as i32);
         let (player_entity, destination) = players.iter(ecs)
-                .find_map(|(entity, pos)| Some((*entity, *pos + delta))).unwrap();
+                .find_map(|(entity, pos)| 
+                    Some((*entity, *pos +  delta_int))).unwrap();
         let mut enemies=<(Entity, &Point)>::query()
         .filter(component::<Enemy>());
 
-        if delta.x != 0 || delta.y != 0{
+        if delta.x != 0.0|| delta.y != 0.0{
             let mut hit_something= false;
             
             enemies.iter(ecs)
@@ -95,7 +97,7 @@ pub fn player_input(
     }
 
     fn use_item(n: usize, ecs: &mut SubWorld, commands: &mut CommandBuffer)
-      -> Point {
+      -> PointF {
         let player_entity=<(Entity, &Player)>::query()
         .iter(ecs)
         .find_map(|(entity,_player)| Some(*entity))
@@ -117,7 +119,7 @@ pub fn player_input(
             }
             ));
         }
-        Point::zero()
+        PointF::new(0.0,0.0)
     }
 
 }
